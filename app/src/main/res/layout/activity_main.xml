@@ -19,51 +19,110 @@
             android:id="@+id/btnEasy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Modo Fácil" />
+            android:text="Fácil" />
 
         <Button
-            android:id="@+id/btnRandom"
+            android:id="@+id/btnMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Modo Aleatorio" />
+            android:text="Medio" />
+
+        <Button
+            android:id="@+id/btnHard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Difícil" />
     </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
+        android:columnCount="3"
+        android:layout_marginTop="32dp">
+
+        <Button
+            android:id="@+id/cell00"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell01"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell02"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell10"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell11"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell12"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell20"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell21"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/cell22"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:textSize="24sp" />
+    </GridLayout>
 
     <TextView
         android:id="@+id/gameState"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Inicia el juego"
+        android:text="Elige una dificultad"
         android:textSize="18sp" />
 
-    <Spinner
-        android:id="@+id/playerHand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
-
-        <Button
-            android:id="@+id/btnPlay"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Jugar" />
-
-        <Button
-            android:id="@+id/btnDraw"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Robar" />
-    </LinearLayout>
-
 </LinearLayout>
-

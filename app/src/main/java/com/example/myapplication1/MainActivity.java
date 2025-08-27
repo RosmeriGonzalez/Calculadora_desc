@@ -1,9 +1,7 @@
 package com.example.myapplication1;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,16 +11,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 /**
- * Actividad principal que ejecuta un juego básico de UNO.
- * Permite iniciar una partida en modo fácil (la CPU juega la primera carta válida)
- * o en modo aleatorio (la CPU elige una carta válida al azar).
+ * Actividad principal que ejecuta un juego de Tres en línea.
  */
 public class MainActivity extends AppCompatActivity {
 
-    private Spinner playerHand;
+    private TicTacToeGame game;
+    private Button[][] cells = new Button[3][3];
     private TextView gameState;
-    private Button btnPlay, btnDraw, btnEasy, btnRandom;
-    private UnoGame game;
+    private Button btnEasy, btnMedium, btnHard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +26,35 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        playerHand = findViewById(R.id.playerHand);
         gameState = findViewById(R.id.gameState);
-        btnPlay = findViewById(R.id.btnPlay);
-        btnDraw = findViewById(R.id.btnDraw);
         btnEasy = findViewById(R.id.btnEasy);
-        btnRandom = findViewById(R.id.btnRandom);
+        btnMedium = findViewById(R.id.btnMedium);
+        btnHard = findViewById(R.id.btnHard);
 
-        btnEasy.setOnClickListener(v -> startGame(UnoGame.AiMode.EASY));
-        btnRandom.setOnClickListener(v -> startGame(UnoGame.AiMode.RANDOM));
-
-        btnPlay.setOnClickListener(v -> {
-            if (game == null) return;
-            int index = playerHand.getSelectedItemPosition();
-            if (game.playerPlay(index)) {
-                afterPlayerAction();
-            } else {
-                gameState.setText("Carta superior: " + game.getTopCard() +
-                        "\nNo puedes jugar esa carta" +
-                        "\nCartas CPU: " + game.getAiHandSize());
+        // Inicializa botones del tablero
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int resId = getResources().getIdentifier("cell" + i + j, "id", getPackageName());
+                cells[i][j] = findViewById(resId);
+                final int r = i, c = j;
+                cells[i][j].setOnClickListener(v -> {
+                    if (game == null) return;
+                    if (game.playerMove(r, c)) {
+                        updateBoard();
+                        checkGame();
+                        if (game.checkWinner() == null && !game.isBoardFull()) {
+                            game.aiMove();
+                            updateBoard();
+                            checkGame();
+                        }
+                    }
+                });
             }
-        });
+        }
 
-        btnDraw.setOnClickListener(v -> {
-            if (game == null) return;
-            game.playerDraw();
-            afterPlayerAction();
-        });
+        btnEasy.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.EASY));
+        btnMedium.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.MEDIUM));
+        btnHard.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.HARD));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -65,35 +63,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void startGame(UnoGame.AiMode aiMode) {
-        game = new UnoGame(aiMode);
-        updateViews();
-        gameState.setText("Carta superior: " + game.getTopCard() +
-                "\nCartas CPU: " + game.getAiHandSize());
+    private void startGame(TicTacToeGame.AiMode mode) {
+        game = new TicTacToeGame(mode);
+        updateBoard();
+        gameState.setText("Tu turno");
     }
 
-    private void afterPlayerAction() {
-        updateViews();
-        if (game.checkWinner()) {
-            gameState.append("\n" + game.getWinnerMessage());
-            return;
-        }
-        game.aiTurn();
-        updateViews();
-        if (game.checkWinner()) {
-            gameState.append("\n" + game.getWinnerMessage());
-        }
-    }
-
-    private void updateViews() {
+    private void updateBoard() {
         if (game == null) return;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                game.playerHandStrings());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        playerHand.setAdapter(adapter);
-        gameState.setText("Carta superior: " + game.getTopCard() +
-                "\nCartas CPU: " + game.getAiHandSize());
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                TicTacToeGame.Player p = game.getCell(i, j);
+                String text = "";
+                if (p == TicTacToeGame.Player.X) text = "X";
+                if (p == TicTacToeGame.Player.O) text = "O";
+                cells[i][j].setText(text);
+            }
+        }
+    }
+
+    private void checkGame() {
+        if (game == null) return;
+        TicTacToeGame.Player winner = game.checkWinner();
+        if (winner != null || game.isBoardFull()) {
+            gameState.setText(game.getWinnerMessage());
+        }
     }
 }
 
