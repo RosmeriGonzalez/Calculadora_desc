@@ -14,6 +14,9 @@ public class UnoGame {
     /** Colores disponibles en el mazo. */
     enum Color { ROJO, VERDE, AZUL, AMARILLO }
 
+    /** Modos de dificultad para la CPU. */
+    public enum AiMode { EASY, RANDOM }
+
     /** Representa una carta con un color y un número. */
     static class Card {
         final Color color;
@@ -38,11 +41,11 @@ public class UnoGame {
     private final List<Card> playerHand = new ArrayList<>();
     private final List<Card> aiHand = new ArrayList<>();
     private final Random random = new Random();
-    private final boolean aiRandom;
+    private final AiMode aiMode;
     private Card topCard;
 
-    public UnoGame(boolean aiRandom) {
-        this.aiRandom = aiRandom;
+    public UnoGame(AiMode aiMode) {
+        this.aiMode = aiMode;
         initDeck();
         Collections.shuffle(deck, random);
         for (int i = 0; i < 5; i++) {
@@ -117,8 +120,9 @@ public class UnoGame {
             }
         }
         if (!valid.isEmpty()) {
-            Card chosen = aiRandom ?
-                    valid.get(random.nextInt(valid.size())) : valid.get(0);
+            Card chosen = (aiMode == AiMode.RANDOM)
+                    ? valid.get(random.nextInt(valid.size()))
+                    : valid.get(0);
             aiHand.remove(chosen);
             topCard = chosen;
         } else {
