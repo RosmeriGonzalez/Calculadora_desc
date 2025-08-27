@@ -1,9 +1,9 @@
 package com.example.myapplication1;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,11 +12,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Actividad principal que muestra un juego de Tic Tac Toe
+ * con tres niveles de dificultad para la CPU.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private EditText num1, num2;
-    private TextView result;
-    private Button btnSum, btnRes, btnMul, btnDiv, btnClear;
+    private final Button[] cells = new Button[9];
+    private Spinner difficultySpinner;
+    private TextView statusText;
+    private Button btnNewGame;
+    private TicTacToeGame game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,46 +30,35 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        num1 = findViewById(R.id.num1);
-        num2 = findViewById(R.id.num2);
-        result = findViewById(R.id.result);
-        btnSum = findViewById(R.id.btnSum);
-        btnRes = findViewById(R.id.btnRes);
-        btnMul = findViewById(R.id.btnMul);
-        btnDiv = findViewById(R.id.btnDiv);
-        btnClear = findViewById(R.id.btnClear);
+        difficultySpinner = findViewById(R.id.difficultySpinner);
+        statusText = findViewById(R.id.statusText);
+        btnNewGame = findViewById(R.id.btnNewGame);
 
-        View.OnClickListener listener = v -> {
-            double n1 = getValue(num1);
-            double n2 = getValue(num2);
-            double r;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Fácil", "Medio", "Difícil"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultySpinner.setAdapter(adapter);
 
-            if (v.getId() == R.id.btnSum) {
-                r = n1 + n2;
-            } else if (v.getId() == R.id.btnRes) {
-                r = n1 - n2;
-            } else if (v.getId() == R.id.btnMul) {
-                r = n1 * n2;
-            } else { // btnDiv
-                if (n2 == 0) {
-                    result.setText("Error: división por cero");
-                    return;
+        for (int i = 0; i < 9; i++) {
+            int resId = getResources().getIdentifier("cell" + i, "id", getPackageName());
+            cells[i] = findViewById(resId);
+            final int index = i;
+            cells[i].setOnClickListener(v -> {
+                if (game == null) return;
+                if (game.humanMove(index)) {
+                    updateBoard();
+                    if (checkGameEnd()) return;
+                    game.cpuMove();
+                    updateBoard();
+                    checkGameEnd();
                 }
-                r = n1 / n2;
-            }
+            });
+        }
 
-            result.setText(String.format("%.2f", r));
-        };
+        btnNewGame.setOnClickListener(v -> startGame());
 
-        btnSum.setOnClickListener(listener);
-        btnRes.setOnClickListener(listener);
-        btnMul.setOnClickListener(listener);
-        btnDiv.setOnClickListener(listener);
-        btnClear.setOnClickListener(v -> {
-            num1.setText("");
-            num2.setText("");
-            result.setText("");
-        });
+        startGame();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -72,11 +67,47 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private double getValue(EditText field) {
-        String text = field.getText().toString();
-        if (text.isEmpty()) {
-            return 0;
+    private void startGame() {
+        TicTacToeGame.Difficulty diff = getSelectedDifficulty();
+        game = new TicTacToeGame(diff);
+        updateBoard();
+        enableBoard(true);
+        statusText.setText("Tu turno");
+    }
+
+    private TicTacToeGame.Difficulty getSelectedDifficulty() {
+        String choice = (String) difficultySpinner.getSelectedItem();
+        if ("Medio".equals(choice)) return TicTacToeGame.Difficulty.MEDIUM;
+        if ("Difícil".equals(choice)) return TicTacToeGame.Difficulty.HARD;
+        return TicTacToeGame.Difficulty.EASY;
+    }
+
+    private void updateBoard() {
+        char[] b = game.getBoard();
+        for (int i = 0; i < b.length; i++) {
+            cells[i].setText(String.valueOf(b[i] == ' ' ? "" : b[i]));
         }
-        return Double.parseDouble(text);
+    }
+
+    private boolean checkGameEnd() {
+        char winner = game.checkWinner();
+        if (winner == 'X') {
+            statusText.setText("¡Ganaste!");
+        } else if (winner == 'O') {
+            statusText.setText("La CPU ganó");
+        } else if (winner == 'D') {
+            statusText.setText("Empate");
+        } else {
+            statusText.setText("Turno de la CPU");
+            return false;
+        }
+        enableBoard(false);
+        return true;
+    }
+
+    private void enableBoard(boolean enable) {
+        for (Button b : cells) {
+            b.setEnabled(enable);
+        }
     }
 }
