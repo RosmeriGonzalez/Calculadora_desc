@@ -10,7 +10,7 @@ import java.util.Random;
 public class TicTacToeGame {
 
     public enum Player { EMPTY, X, O }
-    public enum AiMode { EASY, MEDIUM, HARD }
+    public enum AiMode { TWO_PLAYERS, EASY, MEDIUM, HARD }
 
     private final Player[][] board = new Player[3][3];
     private AiMode aiMode;
@@ -40,13 +40,18 @@ public class TicTacToeGame {
         board[row][col] = p;
     }
 
-    /** Juega la ficha del usuario (X) si la celda está libre. */
-    public boolean playerMove(int row, int col) {
+    /** Juega la ficha indicada si la celda está libre. */
+    public boolean humanMove(Player player, int row, int col) {
         if (board[row][col] != Player.EMPTY || checkWinner() != null) {
             return false;
         }
-        board[row][col] = Player.X;
+        board[row][col] = player;
         return true;
+    }
+
+    /** Juega la ficha del usuario (X) si la celda está libre. */
+    public boolean playerMove(int row, int col) {
+        return humanMove(Player.X, row, col);
     }
 
     /** Turno de la CPU (O) según la dificultad elegida. */
@@ -63,9 +68,11 @@ public class TicTacToeGame {
                 move = randomEmpty();
                 break;
             case HARD:
-            default:
                 move = bestMove();
                 break;
+            case TWO_PLAYERS:
+            default:
+                return;
         }
         if (move != null) {
             board[move[0]][move[1]] = Player.O;
@@ -189,6 +196,11 @@ public class TicTacToeGame {
         if (winner == Player.O) return "La CPU ganó";
         if (isBoardFull()) return "Empate";
         return "";
+    }
+
+    /** Modo de la partida actual. */
+    public AiMode getMode() {
+        return aiMode;
     }
 }
 

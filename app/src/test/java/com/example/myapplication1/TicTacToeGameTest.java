@@ -34,5 +34,14 @@ public class TicTacToeGameTest {
         game.setCellForTest(0, 2, TicTacToeGame.Player.X);
         assertEquals(TicTacToeGame.Player.X, game.checkWinner());
     }
+
+    @Test
+    public void twoPlayersCanMakeMoves() {
+        TicTacToeGame game = new TicTacToeGame(TicTacToeGame.AiMode.TWO_PLAYERS);
+        assertTrue(game.humanMove(TicTacToeGame.Player.X, 0, 0));
+        assertTrue(game.humanMove(TicTacToeGame.Player.O, 0, 1));
+        assertEquals(TicTacToeGame.Player.X, game.getCell(0, 0));
+        assertEquals(TicTacToeGame.Player.O, game.getCell(0, 1));
+    }
 }
 
