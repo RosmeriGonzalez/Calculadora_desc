@@ -32,6 +32,7 @@
         android:gravity="center"
         android:hint="Número 1"
         android:inputType="numberDecimal"
+        android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -48,6 +49,7 @@
         android:gravity="center"
         android:hint="Número 2"
         android:inputType="numberDecimal"
+        android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/num1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -67,7 +69,8 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:text="+"
-            android:background="@drawable/border"/>
+            android:background="@drawable/border"
+            android:textSize="24sp"/>
 
         <Button
             android:id="@+id/btnRes"
@@ -75,7 +78,8 @@
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:text="-"
-            android:background="@drawable/border"/>
+            android:background="@drawable/border"
+            android:textSize="24sp"/>
 
         <Button
             android:id="@+id/btnMul"
@@ -83,7 +87,8 @@
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:text="×"
-            android:background="@drawable/border"/>
+            android:background="@drawable/border"
+            android:textSize="24sp"/>
 
         <Button
             android:id="@+id/btnDiv"
@@ -91,7 +96,17 @@
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:text="÷"
-            android:background="@drawable/border"/>
+            android:background="@drawable/border"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            android:text="C"
+            android:background="@drawable/border"
+            android:textSize="24sp"/>
     </LinearLayout>
 
     <TextView
@@ -106,7 +121,7 @@
         android:padding="16dp"
         android:text="Resultado"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@id/buttonContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
