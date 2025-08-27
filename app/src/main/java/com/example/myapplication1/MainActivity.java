@@ -18,7 +18,9 @@ public class MainActivity extends AppCompatActivity {
     private TicTacToeGame game;
     private Button[][] cells = new Button[3][3];
     private TextView gameState;
-    private Button btnEasy, btnMedium, btnHard;
+    private Button btnEasy, btnMedium, btnHard, btnTwoPlayer;
+    private boolean twoPlayerMode = false;
+    private boolean playerXTurn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         btnEasy = findViewById(R.id.btnEasy);
         btnMedium = findViewById(R.id.btnMedium);
         btnHard = findViewById(R.id.btnHard);
+        btnTwoPlayer = findViewById(R.id.btnTwoPlayer);
 
         // Inicializa botones del tablero
         for (int i = 0; i < 3; i++) {
@@ -39,13 +42,25 @@ public class MainActivity extends AppCompatActivity {
                 final int r = i, c = j;
                 cells[i][j].setOnClickListener(v -> {
                     if (game == null) return;
-                    if (game.playerMove(r, c)) {
-                        updateBoard();
-                        checkGame();
-                        if (game.checkWinner() == null && !game.isBoardFull()) {
-                            game.aiMove();
+                    if (twoPlayerMode) {
+                        TicTacToeGame.Player current = playerXTurn ? TicTacToeGame.Player.X : TicTacToeGame.Player.O;
+                        if (game.humanMove(current, r, c)) {
                             updateBoard();
                             checkGame();
+                            if (game.checkWinner() == null && !game.isBoardFull()) {
+                                playerXTurn = !playerXTurn;
+                                gameState.setText(playerXTurn ? "Turno del jugador X" : "Turno del jugador O");
+                            }
+                        }
+                    } else {
+                        if (game.playerMove(r, c)) {
+                            updateBoard();
+                            checkGame();
+                            if (game.checkWinner() == null && !game.isBoardFull()) {
+                                game.aiMove();
+                                updateBoard();
+                                checkGame();
+                            }
                         }
                     }
                 });
@@ -55,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         btnEasy.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.EASY));
         btnMedium.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.MEDIUM));
         btnHard.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.HARD));
+        btnTwoPlayer.setOnClickListener(v -> startGame(TicTacToeGame.AiMode.TWO_PLAYERS));
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -66,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private void startGame(TicTacToeGame.AiMode mode) {
         game = new TicTacToeGame(mode);
         updateBoard();
-        gameState.setText("Tu turno");
+        twoPlayerMode = mode == TicTacToeGame.AiMode.TWO_PLAYERS;
+        playerXTurn = true;
+        gameState.setText(twoPlayerMode ? "Turno del jugador X" : "Tu turno");
     }
 
     private void updateBoard() {

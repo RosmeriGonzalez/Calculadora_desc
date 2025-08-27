@@ -34,6 +34,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Difícil" />
+
+        <Button
+            android:id="@+id/btnTwoPlayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="1 vs 1" />
     </LinearLayout>
 
     <GridLayout
