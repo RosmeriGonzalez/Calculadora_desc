@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText num1, num2;
     private TextView result;
-    private Button btnSum, btnRes, btnMul, btnDiv;
+    private Button btnSum, btnRes, btnMul, btnDiv, btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnRes = findViewById(R.id.btnRes);
         btnMul = findViewById(R.id.btnMul);
         btnDiv = findViewById(R.id.btnDiv);
+        btnClear = findViewById(R.id.btnClear);
 
         View.OnClickListener listener = v -> {
             double n1 = getValue(num1);
@@ -58,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         btnRes.setOnClickListener(listener);
         btnMul.setOnClickListener(listener);
         btnDiv.setOnClickListener(listener);
+        btnClear.setOnClickListener(v -> {
+            num1.setText("");
+            num2.setText("");
+            result.setText("");
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
