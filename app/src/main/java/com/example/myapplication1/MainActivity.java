@@ -1,9 +1,9 @@
 package com.example.myapplication1;
 
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,11 +12,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Actividad principal que ejecuta un juego básico de UNO.
+ * Permite iniciar una partida en modo fácil (la CPU juega la primera carta válida)
+ * o en modo aleatorio (la CPU elige una carta válida al azar).
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private EditText num1, num2;
-    private TextView result;
-    private Button btnSum, btnRes, btnMul, btnDiv, btnClear;
+    private Spinner playerHand;
+    private TextView gameState;
+    private Button btnPlay, btnDraw, btnEasy, btnRandom;
+    private UnoGame game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,45 +30,32 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        num1 = findViewById(R.id.num1);
-        num2 = findViewById(R.id.num2);
-        result = findViewById(R.id.result);
-        btnSum = findViewById(R.id.btnSum);
-        btnRes = findViewById(R.id.btnRes);
-        btnMul = findViewById(R.id.btnMul);
-        btnDiv = findViewById(R.id.btnDiv);
-        btnClear = findViewById(R.id.btnClear);
+        playerHand = findViewById(R.id.playerHand);
+        gameState = findViewById(R.id.gameState);
+        btnPlay = findViewById(R.id.btnPlay);
+        btnDraw = findViewById(R.id.btnDraw);
+        btnEasy = findViewById(R.id.btnEasy);
+        btnRandom = findViewById(R.id.btnRandom);
 
-        View.OnClickListener listener = v -> {
-            double n1 = getValue(num1);
-            double n2 = getValue(num2);
-            double r;
+        btnEasy.setOnClickListener(v -> startGame(false));
+        btnRandom.setOnClickListener(v -> startGame(true));
 
-            if (v.getId() == R.id.btnSum) {
-                r = n1 + n2;
-            } else if (v.getId() == R.id.btnRes) {
-                r = n1 - n2;
-            } else if (v.getId() == R.id.btnMul) {
-                r = n1 * n2;
-            } else { // btnDiv
-                if (n2 == 0) {
-                    result.setText("Error: división por cero");
-                    return;
-                }
-                r = n1 / n2;
+        btnPlay.setOnClickListener(v -> {
+            if (game == null) return;
+            int index = playerHand.getSelectedItemPosition();
+            if (game.playerPlay(index)) {
+                afterPlayerAction();
+            } else {
+                gameState.setText("Carta superior: " + game.getTopCard() +
+                        "\nNo puedes jugar esa carta" +
+                        "\nCartas CPU: " + game.getAiHandSize());
             }
+        });
 
-            result.setText(String.format("%.2f", r));
-        };
-
-        btnSum.setOnClickListener(listener);
-        btnRes.setOnClickListener(listener);
-        btnMul.setOnClickListener(listener);
-        btnDiv.setOnClickListener(listener);
-        btnClear.setOnClickListener(v -> {
-            num1.setText("");
-            num2.setText("");
-            result.setText("");
+        btnDraw.setOnClickListener(v -> {
+            if (game == null) return;
+            game.playerDraw();
+            afterPlayerAction();
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -72,11 +65,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private double getValue(EditText field) {
-        String text = field.getText().toString();
-        if (text.isEmpty()) {
-            return 0;
+    private void startGame(boolean randomAi) {
+        game = new UnoGame(randomAi);
+        updateViews();
+        gameState.setText("Carta superior: " + game.getTopCard() +
+                "\nCartas CPU: " + game.getAiHandSize());
+    }
+
+    private void afterPlayerAction() {
+        updateViews();
+        if (game.checkWinner()) {
+            gameState.append("\n" + game.getWinnerMessage());
+            return;
         }
-        return Double.parseDouble(text);
+        game.aiTurn();
+        updateViews();
+        if (game.checkWinner()) {
+            gameState.append("\n" + game.getWinnerMessage());
+        }
+    }
+
+    private void updateViews() {
+        if (game == null) return;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                game.playerHandStrings());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        playerHand.setAdapter(adapter);
+        gameState.setText("Carta superior: " + game.getTopCard() +
+                "\nCartas CPU: " + game.getAiHandSize());
     }
 }
+
