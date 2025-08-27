@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         btnEasy = findViewById(R.id.btnEasy);
         btnRandom = findViewById(R.id.btnRandom);
 
-        btnEasy.setOnClickListener(v -> startGame(false));
-        btnRandom.setOnClickListener(v -> startGame(true));
+        btnEasy.setOnClickListener(v -> startGame(UnoGame.AiMode.EASY));
+        btnRandom.setOnClickListener(v -> startGame(UnoGame.AiMode.RANDOM));
 
         btnPlay.setOnClickListener(v -> {
             if (game == null) return;
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void startGame(boolean randomAi) {
-        game = new UnoGame(randomAi);
+    private void startGame(UnoGame.AiMode aiMode) {
+        game = new UnoGame(aiMode);
         updateViews();
         gameState.setText("Carta superior: " + game.getTopCard() +
                 "\nCartas CPU: " + game.getAiHandSize());
