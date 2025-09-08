@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication1"
+    namespace = "com.example.conejossaltarines"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.myapplication1"
+        applicationId = "com.example.conejossaltarines"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
