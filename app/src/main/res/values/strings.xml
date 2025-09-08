@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">TresEnLinea</string>
+    <string name="app_name">Los Seis Conejos Saltarines</string>
+    <string name="invalid_move">Movimiento inválido</string>
+    <string name="congrats">¡Felicidades!</string>
+    <string name="win_message">Los conejos han intercambiado posiciones.</string>
+    <string name="restart">Reiniciar</string>
+    <string name="reset_button">Reiniciar</string>
+    <string name="moves_count">Movimientos: %1$d</string>
+    <string name="moves_label">Movimientos: 0</string>
 </resources>
