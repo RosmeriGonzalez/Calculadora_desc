@@ -1,135 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".MainActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/btnEasy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fácil" />
-
-        <Button
-            android:id="@+id/btnMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Medio" />
-
-        <Button
-            android:id="@+id/btnHard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Difícil" />
-
-        <Button
-            android:id="@+id/btnTwoPlayer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="1 vs 1" />
-    </LinearLayout>
-
-    <GridLayout
-        android:id="@+id/board"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="3"
-        android:columnCount="3"
-        android:layout_marginTop="32dp">
-
-        <Button
-            android:id="@+id/cell00"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell01"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell02"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell10"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell11"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell12"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell20"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell21"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/cell22"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:textSize="24sp" />
-    </GridLayout>
+    android:gravity="center"
+    android:background="@drawable/fondo"
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/gameState"
-        android:layout_width="match_parent"
+        android:id="@+id/tvMoves"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Elige una dificultad"
-        android:textSize="18sp" />
+        android:text="@string/moves_label"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:id="@+id/board"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/slot0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_derecha" />
+
+        <ImageView
+            android:id="@+id/slot1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_derecha" />
+
+        <ImageView
+            android:id="@+id/slot2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_derecha" />
+
+        <ImageView
+            android:id="@+id/slot3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/piedra" />
+
+        <ImageView
+            android:id="@+id/slot4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_izquierda" />
+
+        <ImageView
+            android:id="@+id/slot5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_izquierda" />
+
+        <ImageView
+            android:id="@+id/slot6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/conejo_izquierda" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_button"
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>
